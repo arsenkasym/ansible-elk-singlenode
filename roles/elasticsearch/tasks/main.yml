@@ -1,0 +1,41 @@
+# Installation elasticsearch
+  - name: Import Elasticsearch GPG key
+    ansible.builtin.command:
+         cmd: rpm --import https://artifacts.elastic.co/GPG-KEY-elasticsearch
+    become: true
+
+  - name: "Copy our repo file to /etc/yum.repos.d/"
+    ansible.builtin.copy: 
+      src: "files/elasticsearch.repo" 
+      dest: "/etc/yum.repos.d/" 
+      owner: "devops" 
+      group: "devops" 
+      mode: "0755"
+
+  - name: "Install Elasticsearch"
+    ansible.builtin.yum:
+     name: elasticsearch
+     state: present
+     enablerepo: elasticsearch
+    become: true
+    register: yum_result
+
+  - name: "Save yum install output to file"
+    ansible.builtin.copy:
+     content: "{{ yum_result.stdout }}"
+     dest: /etc/elasticsearch/stdout.txt
+    become: true
+    when: yum_result.stdout is defined
+
+  - name: "Delete elasticsearch.yml"
+    ansible.builtin.file:
+     path: "/etc/elasticsearch/elasticsearch.yml"
+     state: "absent"
+
+  - name: "Copy own elasticsearch.yml file"
+    ansible.builtin.copy:
+     src: "files/elasticsearch.yml"
+     dest: "/etc/elasticsearch/"
+     owner: "root"
+     group: "elasticsearch"
+     mode: "0755"

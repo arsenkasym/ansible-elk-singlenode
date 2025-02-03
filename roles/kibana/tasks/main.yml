@@ -1,0 +1,19 @@
+#Installation Kibana
+
+- name: "Install Kibana"
+  ansible.builtin.yum:
+     name: kibana
+     state: present
+     enablerepo: elasticsearch
+
+- name: "Delete kibana.yml"
+  ansible.builtin.file:
+     path: "/etc/kibana/kibana.yml"
+     state: "absent"
+- name: "Copy kibana.yml"
+  ansible.builtin.copy:
+     src: "files/kibana.yml"
+     dest: "/etc/kibana"
+     owner: "root"
+     group: "kibana"
+     mode: "0755"

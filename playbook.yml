@@ -1,0 +1,35 @@
+---
+- hosts: "all"
+  become: true
+  roles:
+    - elasticsearch
+    - kibana
+    - logstash
+
+
+  tasks:
+  - name: "Firewall ports enable"
+    ansible.builtin.firewalld:
+     port: "{{ item }}/tcp"
+     permanent: true
+     state: enabled
+    loop:
+    - 9200
+    - 5601
+    become: true
+
+  - name: "Reload firewalld to apply changes"
+    ansible.builtin.firewalld:
+     state: reloaded
+    become: true
+  
+  - name: "Restart Elasticsearch and Kibana"
+    ansible.builtin.systemd:
+     name: "{{ item }}"
+     state: restarted
+     enabled: true
+    loop:
+    - elasticsearch
+    - kibana
+    become: true
+

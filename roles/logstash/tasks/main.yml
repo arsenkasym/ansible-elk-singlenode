@@ -1,0 +1,6 @@
+- name: "Install logstash"
+  ansible.builtin.yum:
+    name: logstash
+    state: present
+    enablerepo: elasticsearch
+  become: true
