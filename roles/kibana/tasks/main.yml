@@ -6,14 +6,37 @@
      state: present
      enablerepo: elasticsearch
 
-- name: "Delete kibana.yml"
-  ansible.builtin.file:
-     path: "/etc/kibana/kibana.yml"
-     state: "absent"
-- name: "Copy kibana.yml"
-  ansible.builtin.copy:
-     src: "files/kibana.yml"
-     dest: "/etc/kibana"
-     owner: "root"
-     group: "kibana"
-     mode: "0755"
+- name: "Replace a sslverificationmode in a file"
+  ansible.builtin.lineinfile:
+    path: /etc/kibana/kibana.yml
+    regexp: '^#elasticsearch.ssl.verificationMode'
+    line: 'elasticsearch.ssl.verificationMode: none'
+    backup: yes
+
+- name: "Replace a sslverificationmode in a file"
+  ansible.builtin.lineinfile:
+    path: /etc/kibana/kibana.yml
+    regexp: '^#server.host'
+    line: 'server.host: "0.0.0.0"'
+    backup: yes
+
+
+- name: "Replace a elasticsearch.hosts in a file"
+  ansible.builtin.lineinfile:
+    path: /etc/kibana/kibana.yml
+    regexp: '^#elasticsearch.hosts'
+    line: 'elasticsearch.hosts: ["https://{{ elastic_address }}:9200"]'
+
+- name: "Replace a elastic username"
+  ansible.builtin.lineinfile:
+    path: /etc/kibana/kibana.yml
+    regexp: '^#elasticsearch.username'
+    line: 'elasticsearch.username: "kibana_system"'
+
+
+- name: "Replace a elastic password"
+  ansible.builtin.lineinfile:
+    path: /etc/kibana/kibana.yml
+    regexp: '^#elasticsearch.password'
+    line: 'elasticsearch.password: "kibana"'
+

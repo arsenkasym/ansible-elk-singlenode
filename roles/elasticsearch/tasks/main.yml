@@ -18,14 +18,16 @@
      state: present
      enablerepo: elasticsearch
     become: true
-    register: yum_result
 
-  - name: "Save yum install output to file"
-    ansible.builtin.copy:
-     content: "{{ yum_result.stdout }}"
-     dest: /etc/elasticsearch/stdout.txt
+  - name: "Set ownership and permissions for Elasticsearch certificates directory"
+    ansible.builtin.file:
+      path: "/etc/elasticsearch/certs/"
+      state: directory
+      owner: elasticsearch
+      group: elasticsearch
+      mode: "0750"
+      recurse: yes
     become: true
-    when: yum_result.stdout is defined
 
   - name: "Delete elasticsearch.yml"
     ansible.builtin.file:
@@ -36,6 +38,18 @@
     ansible.builtin.copy:
      src: "files/elasticsearch.yml"
      dest: "/etc/elasticsearch/"
-     owner: "root"
+     owner: "elasticsearch"
      group: "elasticsearch"
      mode: "0755"
+
+  - name: "Enable and restart Elasticsearch"
+    ansible.builtin.systemd:
+     name: "elasticsearch"
+     enabled: yes
+     state: restarted
+    become: true
+
+  - name: "Reset elastic user"
+    ansible.builtin.command: '/bin/bash $PWD/resetuser.sh'
+    become: true
+      

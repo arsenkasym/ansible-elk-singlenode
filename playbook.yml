@@ -19,11 +19,10 @@
     become: true
 
   - name: "Reload firewalld to apply changes"
-    ansible.builtin.firewalld:
-     state: reloaded
+    ansible.builtin.command: firewall-cmd --reload
     become: true
-  
-  - name: "Restart Elasticsearch and Kibana"
+
+  - name: "Restart ElK stack"
     ansible.builtin.systemd:
      name: "{{ item }}"
      state: restarted
@@ -31,5 +30,6 @@
     loop:
     - elasticsearch
     - kibana
+    - logstash
     become: true
 
