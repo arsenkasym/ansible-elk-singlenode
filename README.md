@@ -1,4 +1,4 @@
-# ansible-elk
+RedHat based OS
 Deploy ELK-stack in single node with ansible
 
 1. Clone this repository
