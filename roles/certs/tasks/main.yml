@@ -1,0 +1,26 @@
+- name: "Create certs directory for Kibana"
+  ansible.builtin.file:
+    path: /etc/kibana/certs
+    state: directory
+    owner: kibana
+    group: kibana
+    mode: '0755'
+    recurse: yes
+  become: true
+
+- name: "Certs installing"
+  ansible.builtin.command: '/bin/bash $PWD/certs.sh'
+  become: true
+
+- name: "Update SSL settings in kibana.yml"
+  ansible.builtin.lineinfile:
+    path: /etc/kibana/kibana.yml
+    regexp: "{{ item.regex }}"
+    line: "{{ item.line }}"
+  loop:
+    - { regex: '^#server.ssl.enabled:', line: 'server.ssl.enabled: true' }
+    - { regex: '^#server.ssl.certificate:', line: 'server.ssl.certificate: "/etc/kibana/certs/kibana-server/kibana-server.crt"' }
+    - { regex: '^#server.ssl.key:', line: 'server.ssl.key: "/etc/kibana/certs/kibana-server/kibana-server.key"' }
+  become: true
+
+

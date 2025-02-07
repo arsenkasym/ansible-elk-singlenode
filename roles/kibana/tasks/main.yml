@@ -13,7 +13,7 @@
     line: 'elasticsearch.ssl.verificationMode: none'
     backup: yes
 
-- name: "Replace a sslverificationmode in a file"
+- name: "Replace a server.host in a file"
   ansible.builtin.lineinfile:
     path: /etc/kibana/kibana.yml
     regexp: '^#server.host'
