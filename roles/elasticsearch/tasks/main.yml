@@ -8,8 +8,8 @@
     ansible.builtin.copy: 
       src: "files/elasticsearch.repo" 
       dest: "/etc/yum.repos.d/" 
-      owner: "devops" 
-      group: "devops" 
+      owner: "root" 
+      group: "root" 
       mode: "0755"
 
   - name: "Install Elasticsearch"
