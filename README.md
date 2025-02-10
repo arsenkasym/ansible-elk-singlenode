@@ -3,7 +3,7 @@ Deploy ELK-stack in single node with ansible
 
 1. Clone this repository
 
-git remote set-url origin git@github.com:arsenkasym/ansible-elk.git
+git clone git@github.com:arsenkasym/ansible-elk.git
 
 2. Run playbook
 
