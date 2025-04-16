@@ -6,6 +6,7 @@ Deploy ELK-stack in single node with ansible
 git clone https://github.com/arsenkasym/ansible-elk-singlenode.git
 
 ansible-galaxy collection install ansible.posix
+
 yum install zip
 
 2. Run playbook
