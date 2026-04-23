@@ -41,7 +41,7 @@
     line: 'elasticsearch.password: "kibana"'
 
 - name: "Generate Kibana encryption keys"
-  ansible.builtin.command: /usr/share/kibana/bin/kibana-encryption-keys generate | grep '^xpack\.'
+  ansible.builtin.shell: /usr/share/kibana/bin/kibana-encryption-keys generate | sed -n '/^Settings:/,$p' | grep '^xpack\.' | head -n 3
   register: kibana_keys
 
 - name: "Append Kibana encryption keys to kibana.yml"
