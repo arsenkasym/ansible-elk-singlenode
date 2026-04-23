@@ -115,5 +115,5 @@ http.host: 0.0.0.0
 # Allow other nodes to join the cluster from anywhere
 # Connections are encrypted and mutually authenticated
 #transport.host: 0.0.0.0
-
+discovery.type: single-node
 #----------------------- END SECURITY AUTO CONFIGURATION -------------------------
