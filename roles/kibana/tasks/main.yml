@@ -40,3 +40,21 @@
     regexp: '^#elasticsearch.password'
     line: 'elasticsearch.password: "kibana"'
 
+- name: "Generate Kibana encryption keys"
+  ansible.builtin.command: /usr/share/kibana/bin/kibana-encryption-keys generate
+  register: kibana_keys
+  when: kibana_keys_exist.rc != 0
+
+- name: "Append Kibana encryption keys to kibana.yml"
+  ansible.builtin.blockinfile:
+    path: /etc/kibana/kibana.yml
+    marker: "# {mark} ANSIBLE MANAGED KIBANA ENCRYPTION KEYS"
+    block: "{{ kibana_keys.stdout }}"
+    create: yes
+  when: kibana_keys_exist.rc != 0
+
+- name: "Restart Kibana"
+  ansible.builtin.service:
+    name: kibana
+    state: restarted
+  when: kibana_keys_exist.rc != 0
