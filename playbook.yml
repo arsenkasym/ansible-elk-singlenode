@@ -16,6 +16,7 @@
     loop:
     - 9200
     - 5601
+    - 8220
     become: true
 
   - name: "Reload firewalld to apply changes"
