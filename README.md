@@ -1,13 +1,17 @@
 RedHat based OS
 Deploy ELK-stack in single node with ansible
 
-1. Clone this repository and install module, install zip
+1. Clone this repository, install ansible and module, install zip
 
 git clone https://github.com/arsenkasym/ansible-elk-singlenode.git
+
+yum install ansible-core
 
 ansible-galaxy collection install ansible.posix
 
 yum install zip
+
+cd ansible-elk-singlenode/
 
 2. Run playbook
 
